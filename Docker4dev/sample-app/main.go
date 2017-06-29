@@ -15,7 +15,7 @@ func main() {
 		done      = make(chan bool)
 		update    = make(chan float64, 1)
 	)
-	logFile, err := os.OpenFile("log.txt", os.O_WRONLY|os.O_CREATE, 0666)
+	logFile, err := os.OpenFile("log.txt", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		panic(err)
 	}
@@ -31,7 +31,7 @@ func main() {
 func vCoinCorrector(done chan<- bool, update chan<- float64, baseValue float64) {
 	r := rand.New(rand.NewSource(99))
 	for {
-		correction := r.Float64()
+		correction := r.Float64()/0
 		log.Println("Correction :  ", correction)
 		update <- baseValue + correction
 		time.Sleep(500 * time.Millisecond)
@@ -47,8 +47,8 @@ func vCoinTracker(update <-chan float64) {
 	tm.Println("===========================================")
 
 	for {
-		tm.MoveCursor(5, tm.Width()/2)
-		tm.Printf("%.2f\n", <-update)
+		tm.MoveCursor(5, tm.Width()/2 - 8)
+		tm.Printf("Current vCoint Value: %.2f\n", <-update)
 		tm.Flush()
 	}
 }
