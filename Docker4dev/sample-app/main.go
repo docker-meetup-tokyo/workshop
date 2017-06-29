@@ -31,7 +31,7 @@ func main() {
 func vCoinCorrector(done chan<- bool, update chan<- float64, baseValue float64) {
 	r := rand.New(rand.NewSource(99))
 	for {
-		correction := r.Float64()/0
+		correction := r.Float64()
 		log.Println("Correction :  ", correction)
 		update <- baseValue + correction
 		time.Sleep(500 * time.Millisecond)
