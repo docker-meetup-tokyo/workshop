@@ -13,6 +13,6 @@ VOLUME /vcoin
 # Declare it as workdir, On container creation, by default this will be current dir.
 WORKDIR /vcoin
 
-
+RUN go build
 
 
