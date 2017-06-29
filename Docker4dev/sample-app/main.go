@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"math/rand"
+	"os"
 	"time"
 
 	tm "github.com/buger/goterm"
@@ -14,18 +15,24 @@ func main() {
 		done      = make(chan bool)
 		update    = make(chan float64, 1)
 	)
-	fmt.Println("vcoin Tracker")
+	logFile, err := os.OpenFile("log.txt", os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		panic(err)
+	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
+
 	go vCoinCorrector(done, update, baseValue)
 	go vCoinTracker(update)
 
 	<-done
 }
 
-//
 func vCoinCorrector(done chan<- bool, update chan<- float64, baseValue float64) {
 	r := rand.New(rand.NewSource(99))
 	for {
 		correction := r.Float64()
+		log.Println("Correction :  ", correction)
 		update <- baseValue + correction
 		time.Sleep(500 * time.Millisecond)
 	}
