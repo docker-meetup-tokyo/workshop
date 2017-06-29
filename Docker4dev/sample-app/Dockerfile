@@ -1,9 +1,6 @@
 # Base image
 FROM golang:1.8
 
-ENV HTTP_PROXY="proxy.rdh.ecl.ntt.co.jp:20066"
-ENV HTTPS_PROXY="proxy.rdh.ecl.ntt.co.jp:20066"
-
 # Fetch dependencies
 RUN go get github.com/buger/goterm
 
