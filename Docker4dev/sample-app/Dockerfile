@@ -1,9 +1,6 @@
 # Base image
 FROM golang:1.8
 
-ENV HTTP_PROXY="proxy.rdh.ecl.ntt.co.jp:20066"
-ENV HTTPS_PROXY="proxy.rdh.ecl.ntt.co.jp:20066"
-
 # Fetch dependencies
 RUN go get github.com/buger/goterm
 
@@ -14,7 +11,19 @@ COPY . /vcoin
 VOLUME /vcoin
 
 # Declare it as workdir, On container creation, by default this will be current dir.
-WORKDIR /vcoin
+WORKDIR /vcoin 
+
+CMD ["go", "build"]
+
+# Base image for second image.
+FROM alpine:latest  
+
+WORKDIR /root/
+
+# Copy the binary from first image
+COPY --from=0 /vcoin/vcoin    .
+
+CMD ["./vcoin"]  
 
 
 
